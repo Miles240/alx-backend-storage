@@ -7,13 +7,13 @@ second line: Methods
 5 lines with method = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 one line with method=GET, path=/status
 """
-from pymongo import MongoClient
+from pymongo import MongoClient, collection
 
 
 METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
 
-def log_stats(mongo_collection, option=None):
+def log_stats(mongo_collection: collection.Collection, option=None) -> None:
     """
     Prototype: def log_stats(mongo_collection, option=None):
     Provide some stats about Nginx logs stored in MongoDB
