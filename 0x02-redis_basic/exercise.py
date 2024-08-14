@@ -22,13 +22,13 @@ class Cache:
         Returns:
             key(string): uuuid string
         """
-        key = str(uuid.uuid1())
-        self._redis.set(key, data)
-        return key
+        rkey = str(uuid.uuid1())
+        self._redis.set(rkey, data)
+        return rkey
 
     def get(
         self, key: str, fn: Optional[Callable] = None
-    ) -> Union[str, int, bytes, float]:
+    ) -> Optional[Union[str, int, bytes, float]]:
         """
         Retrieves data from Redis and applies an optional function to transform the data.
         Args:
@@ -42,13 +42,28 @@ class Cache:
         if data is None:
             return None
         if fn:
-            return fn(data)
+            data = fn(data)
         return data
 
     def get_str(self, key: str) -> str:
         """Retrives a string format"""
-        return self.get(key, str)
+        data = self._redis.get(key)
+        return data.decode("utf-8")
 
     def get_int(self, key: str) -> int:
         """Retrives an int format"""
-        return self.get(key, int)
+        data = self._redis.get(key)
+        try:
+            data = int(data.decode("utf-8"))
+        except Exception:
+            data = 0
+        return data
+
+
+cache = Cache()
+
+TEST_CASES = {b"foo": None, 123: int, "bar": lambda d: d.decode("utf-8")}
+
+for value, fn in TEST_CASES.items():
+    key = cache.store(value)
+    assert cache.get(key, fn=fn) == value
