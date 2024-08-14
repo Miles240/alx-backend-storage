@@ -39,7 +39,7 @@ class Cache:
         """
 
         data = self._redis.get(key)
-        if fn:
+        if key:
             return fn(data)
         return data
 
