@@ -22,6 +22,6 @@ class Cache:
         Returns:
             key(string): uuuid string
         """
-        self.key = str(uuid.uuid1())
-        self._redis.set(self.key, data)
-        return self.key
+        key = str(uuid.uuid1())
+        self._redis.set(key, data)
+        return key

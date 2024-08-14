@@ -3,10 +3,10 @@
 """Contains the list_all module"""
 
 from typing import Dict, List
-from pymongo import MongoClient
+from pymongo import MongoClient, collection
 
 
-def list_all(mongo_collection: List) -> List:
+def list_all(mongo_collection: collection.Collection) -> List:
     """
     List all documents in a MongoDB collection.
     Args:
